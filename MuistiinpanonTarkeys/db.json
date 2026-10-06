@@ -1,0 +1,26 @@
+{
+    "notes": [
+        {
+            "id": "1",
+            "content": "Hasta",
+            "important": true
+        },
+        {
+            "id": "2",
+            "content": "la",
+            "important": false
+        },
+        {
+            "id": "3",
+            "content": "vista",
+            "important": true
+        },
+        {
+            "id": "4",
+            "content": "baby",
+            "important": false
+        }
+    ]
+    
+}
+    

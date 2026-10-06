@@ -1,0 +1,29 @@
+
+GET http://localhost:3001/
+###
+
+
+GET http://localhost:3001/api/books/
+###
+
+GET http://localhost:3001/api/books/5
+###
+
+POST http://localhost:3001/api/books
+Content-Type: application/json
+
+{
+    
+    "title": "Sinuhe egyptiläinen",
+    "author": "Mika Waltari",
+    "review": "Vaikuttava",
+    "rating": 5
+}
+###
+
+
+DELETE http://localhost:3001/api/books/2
+###
+
+
+
