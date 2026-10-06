@@ -114,9 +114,10 @@ function App() {
     : books.filter(book=> {
       const titleMatch  = book.title.toLowerCase().includes(searchTerm.toLowerCase())
       const authorMatch = book.author.includes(searchTerm)
+      const ratingMatch = book.rating.includes(searchTerm)
       
       return(
-         titleMatch || authorMatch)
+         titleMatch || authorMatch || ratingMatch)
     })
   console.log(books)
   console.log(Array.isArray(books))
@@ -201,7 +202,9 @@ function App() {
       handleAuthorChange={handleAuthorChange}
       addBook={addBook}
       />
-      
+      <div>
+        
+      </div>
       <Books
       books={booksToShow}
       deleteBook={handleDelete}
