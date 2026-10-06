@@ -10,40 +10,6 @@ app.use(cors())
 app.use(express.json())
 
 
-// ============================================================
-// DATA
-// ============================================================
-
-let books = [
-  {
-    id: 1,
-    title: 'Sinuhe egyptiläinen',
-    author: 'Mika Waltari',
-    review: 'Vaikuttava',
-    rating: 5
-  },
-  {
-    id: 2,
-    title: 'Sinuhe suomalainen',
-    author: 'Mika Waltari',
-    review: 'Aika ok',
-    rating: 4
-  },
-  {
-    id: 3,
-    title: 'Sinuhe ruotsalainen',
-    author: 'Mika Waltari',
-    review: 'No jotain',
-    rating: 3
-  },
-  {
-    id: 4,
-    title: 'Sinuhe norjalainen',
-    author: 'Mika Waltari',
-    review: 'emt',
-    rating: 2
-  }
-]
 
 
 // ============================================================

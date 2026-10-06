@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import axios from 'axios'
 
 
-const baseUrl = 'http://localhost:3001/api/books'
+const baseUrl = 'http://localhost:3001/books'
 
 // LISÄTÄÄN SUODATIN KIRJOJEN ETSINTÄÄ VARTEN
 // KOPIOIDAAN PUHELINLUETTELON MALLISTA
@@ -121,7 +121,7 @@ function App() {
   
 
   useEffect(()=> {
-    axios.get('http://localhost:3001/api/books')
+    axios.get('http://localhost:3001/books')
     .then(response => {
       console.log(response.data)
       console.log(Array.isArray(response.data.books))
@@ -169,7 +169,7 @@ function App() {
       console.log('DELETE:',id,title)
       if (window.confirm(`Delete book ${title} ?`)){
         axios
-        .delete(`http://localhost:3001/api/books/${id}`)
+        .delete(`http://localhost:3001/books/${id}`)
         .then(() => {
           setBooks(books.filter(b => b.id !== id))
         })
@@ -186,7 +186,7 @@ function App() {
           `${newTitle} on jo lisätty kirjastoon`
         )) {
           axios
-          .put(`http://localhost:3001/api/books/${existingBook.id}`,bookObject
+          .put(`http://localhost:3001/books/${existingBook.id}`,bookObject
 
           )
           .then(response => {
@@ -202,7 +202,7 @@ function App() {
           })
         }
       }else {
-          axios.post(`http://localhost:3001/api/books`, bookObject)
+          axios.post(`http://localhost:3001/books`, bookObject)
           .then(response => {
             setBooks(books.concat(response.data))
             setNewTitle('')

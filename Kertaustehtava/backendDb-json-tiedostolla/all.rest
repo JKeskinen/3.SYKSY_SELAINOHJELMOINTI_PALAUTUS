@@ -1,0 +1,30 @@
+
+GET http://localhost:3001/
+###
+
+// kun on oma db.json, niin silloin poistui /api
+
+GET http://localhost:3001/books/
+###
+
+GET http://localhost:3001/books/5
+###
+
+POST http://localhost:3001/books
+Content-Type: application/json
+
+{
+    "id": "id",
+    "title": "Idiootit ympärilläni",
+    "author": "Thomas Erikson",
+    "review": "Vaikuttava",
+    "rating": 5
+}
+###
+
+
+DELETE http://localhost:3001/books/19383
+###
+
+
+
