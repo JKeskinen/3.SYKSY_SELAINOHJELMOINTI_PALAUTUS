@@ -23,8 +23,24 @@ let books =[
 
 
 const generateId = () => {
-  return String(Math.floor(Math.random() * 1000000))
+  return Number(Math.floor(Math.random() * 1000000))
 }
+
+app.get('/',(req,res) => {
+    res.send(`
+        <p>Kirjahyllyn pääty</p>
+        <p>${new Date()}</p>
+        `)
+})
+
+
+app.get('/info', (req, res) => {
+  res.send(`
+    <p>Kirjahyllyssä on ${books.length} kirjaa</p>
+    <p>${new Date()}</p>
+    <button>/api/books/</button>
+  `)
+})
 
 //kaikki kirjat 
 app.get('/api/books', (req,res)=>{
@@ -55,7 +71,9 @@ app.post('/api/books', (req, res) => {
   const book = {
     id: generateId(),
     title: body.title,
-    author: body.author
+    author: body.author,
+    review: body.review,
+    rating: body.rating
   }
 
   books = books.concat(book)
@@ -68,14 +86,13 @@ app.post('/api/books', (req, res) => {
 
 
 
-
+//--NÄYTÄ KIRJA ID-NUMERON PERUSTEELLA
 app.get('/api/books/:id', (req, res) => {
   const id = Number(req.params.id)
 
   const book = books.find(
     book => book.id === id
   )
-
   if (!book) {
     return res.status(404).json({
       error: 'book not found'
@@ -88,25 +105,26 @@ app.get('/api/books/:id', (req, res) => {
 
 
 
-
-
-
+//--DELETE
 app.delete('/api/books/:id', (req, res) => {
   const id = Number(req.params.id)
-
   books = books.filter(
     books => books.id !== id
   )
-
   res.status(204).end()
 })
 
 
+
+
+
+
+//------------------------------
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
-
 app.use(unknownEndpoint)
+
 
 const PORT = 3001
 app.listen(PORT,() =>{
