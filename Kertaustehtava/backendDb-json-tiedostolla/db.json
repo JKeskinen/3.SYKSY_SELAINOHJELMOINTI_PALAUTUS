@@ -27,6 +27,13 @@
       "author": "Mika Waltari",
       "review": "emt",
       "rating": 2
+    },
+    {
+      "title": "asd",
+      "author": "asd",
+      "review": "asd",
+      "rating": 5,
+      "id": "59pSyPv1Fvs"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

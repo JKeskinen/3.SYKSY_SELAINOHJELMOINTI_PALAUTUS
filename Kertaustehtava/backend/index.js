@@ -11,6 +11,20 @@ app.use(express.json())
 
 
 // ============================================================
+// ETUSIVU
+// ============================================================
+
+app.get('/home', (req, res) => {
+  res.send(`
+    <h1>Kirjahyllyn pääty</h1>
+    <h2>Etusivu</h2>
+    <p>${new Date()}</p>
+  `)
+})
+
+
+
+// ============================================================
 // DATA
 // ============================================================
 
@@ -20,28 +34,36 @@ let books = [
     title: 'Sinuhe egyptiläinen',
     author: 'Mika Waltari',
     review: 'Vaikuttava',
-    rating: 5
+    rating: 5,
+    status: 'SAATAVILLA',
+    borrower: null
   },
   {
     id: 2,
     title: 'Sinuhe suomalainen',
     author: 'Mika Waltari',
     review: 'Aika ok',
-    rating: 4
+    rating: 4,
+    status: 'SAATAVILLA',
+    borrower: null
   },
   {
     id: 3,
     title: 'Sinuhe ruotsalainen',
     author: 'Mika Waltari',
     review: 'No jotain',
-    rating: 3
+    rating: 3,
+    status: 'SAATAVILLA',
+    borrower: null
   },
   {
     id: 4,
     title: 'Sinuhe norjalainen',
     author: 'Mika Waltari',
     review: 'emt',
-    rating: 2
+    rating: 2,
+    status: 'SAATAVILLA',
+    borrower: null
   }
 ]
 
@@ -139,7 +161,10 @@ app.post('/api/books', (req, res) => {
     title: body.title,
     author: body.author,
     review: body.review,
-    rating: body.rating
+    rating: body.rating,
+    // lisätään varaustieto ja lainaaja. 
+    status: 'SAATAVILLA',
+    borrower: null
   }
 
   books = books.concat(book)
@@ -174,16 +199,14 @@ app.put('/api/books/:id', (req, res) => {
     })
   }
 
+  
   // Päivitetään kirjan tiedot
   const updatedBook = {
-    id: book.id,
-    title: body.title,
-    author: body.author,
-    review: body.review,
-    rating: body.rating
+    ...book,
+    ...body,
+    id: book.id
   }
-
-  // Korvataan vanha kirja uudella
+    // Korvataan vanha kirja uudella
   books = books.map(book =>
     book.id === id
       ? updatedBook
@@ -193,6 +216,20 @@ app.put('/api/books/:id', (req, res) => {
   res.json(updatedBook)
 })
 
+  /* ALKUPERÄINEN VERSIO
+  const updatedBook = {
+    id: book.id,
+    title: body.title,
+    author: body.author,
+    review: body.review,
+    rating: body.rating,
+    status: body.status,
+    borrower: body.borrower
+  }
+ 
+
+
+*/
 
 // ============================================================
 // DELETE – KIRJAN POISTAMINEN

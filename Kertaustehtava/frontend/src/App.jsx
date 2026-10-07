@@ -2,6 +2,13 @@ import {useState, useEffect} from 'react'
 import axios from 'axios'
 
 
+
+
+
+
+
+
+
 const baseUrl = 'http://localhost:3001/api/books'
 
 // LISÄTÄÄN SUODATIN KIRJOJEN ETSINTÄÄ VARTEN
@@ -75,7 +82,7 @@ const BookForm = ({
 )
 
 // Kirjaluettelo omalla returnilla
-const Books = ({books, deleteBook}) => {
+const Books = ({books, deleteBook, changeBookStatus}) => {
   //console.log('Type of deletebook:', typeof deletebook)
   return(
     <table>
@@ -86,6 +93,7 @@ const Books = ({books, deleteBook}) => {
           <td><strong>Author</strong></td>
           <td><strong>Review</strong></td>
           <td><strong>Rating</strong></td>
+          <td><strong>Status</strong></td>
         </tr>
         {books.map((book) =>(
           <tr key={book.id}>
@@ -94,7 +102,24 @@ const Books = ({books, deleteBook}) => {
             <td>{book.author}</td>
             <td>{book.review}</td>
             <td>{book.rating}/5</td>
+            <td>{book.status}</td>
             <td>
+              {book.status === 'SAATAVILLA' && (
+                <button onClick={() => changeBookStatus(book.id, 'VARATTU')}>
+                  Varaa
+                </button>
+              )}
+              {book.status === 'VARATTU' && (
+                <button onClick={() => changeBookStatus(book.id, 'LAINATTU')}>
+                  Lainaa
+                </button>
+              )}
+              {book.status === 'LAINATTU' && (
+                <button onClick={() => changeBookStatus(book.id, 'SAATAVILLA')}>
+                  Palauta
+                </button>
+              )}
+              
               <button onClick={() => deleteBook(book.id, book.title)}>Delete</button>
               
             </td>              
@@ -116,9 +141,11 @@ function App() {
   const [newRating, setNewRating] = useState('')
   const [showBestBooks, setShowBestBooks] = useState(false)  // NAPILLE TILA (false) 
 
+
   const bestBooks = books.filter(book => book.rating === 5) // NAPPI PARHAILLE KIRJOILLE
-  
-  
+  const availableBooks = books.filter(book => book.status === 'SAATAVILLA') //NAPPI VAPAILLE KIRJOILLE -> Lisää myös <Books /> kutsuun.
+  const [libraryView, setLibraryView] = useState(false)
+  const [showAvailableBooks, setShowAvailableBooks] = useState(false)
 
   useEffect(()=> {
     axios.get('http://localhost:3001/api/books')
@@ -161,7 +188,29 @@ function App() {
   console.log(Array.isArray(books))
 
 
+    //lisätään STATUKSEN VAIHTAJA VARAA || LAINAA || PALAUTA
+  const changeBookStatus = (id, newStatus) => {
+    const book = books.find(b => b.id === id)
 
+    if (!book) return
+
+    const updatedBook = {
+      ...book,
+      status: newStatus
+    }
+
+    axios
+      .put(`${baseUrl}/${id}`, updatedBook)
+      .then(response => {
+        setBooks(
+          books.map(book =>
+            book.id === id
+              ? response.data
+              : book
+          )
+        )
+      })
+  }
 
 
     // lisätään deleteBook
@@ -178,7 +227,13 @@ function App() {
 
     const addBook = (event) => {
       event.preventDefault()
-      const bookObject = {title : newTitle,author : newAuthor, review : newReview, rating : Number(newRating)}
+      const bookObject = {
+        title : newTitle,
+        author : newAuthor,
+        review : newReview,
+        rating : Number(newRating),
+        status : 'SAATAVILLA',
+        borrower : null}
       const existingBook = books.find(book => book.title === newTitle)
 
       if (existingBook) {
@@ -223,14 +278,18 @@ function App() {
   return (
     <div>
       <h1>Kirja-arvostelu</h1>
+      <button onClick={() => setLibraryView(!libraryView)}>Kirjasto</button>
       <Filter
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
       />
+      <p>Saatavilla: {books.filter(book => book.status === 'SAATAVILLA').length}</p>
+      <p>Varattuna: {books.filter(book => book.status === 'VARATTU').length}</p>
+      <p>Lainattuna: {books.filter(book => book.status === 'LAINATTU').length}</p>
       <ul>
         {books.map(book =>(
           <li key={book.id}>
-            <strong>{book.title}</strong>{book.review} ({book.rating}/5)
+            <strong>{book.title}</strong>{book.review} ({book.rating}/5 {book.status})
           </li>
         ))}
       </ul>
@@ -254,12 +313,44 @@ function App() {
         <button onClick={() => setShowBestBooks(!showBestBooks)}>
           Näytä parhaat kirjat
         </button>
+        <button onClick={()=> setShowAvailableBooks(!showAvailableBooks)}>
+          {showAvailableBooks ? 'Näytä kaikki kirjat' : 'Näytä vapaat kirjat'}
+        </button>
         
       </div>
       <Books
-      books={showBestBooks ? bestBooks : booksToShow}
+      books={showAvailableBooks ? availableBooks : showBestBooks ? bestBooks : booksToShow}  // muista lisätä myös state! const [showAvailableBooks, setShowAvailableBooks] = useState(false)
       deleteBook={handleDelete}
+      changeBookStatus={changeBookStatus} // välitetään varaustieto Books-komponentille
       />
+      <h2>SAATAVILLA OLEVAT KIRJAT</h2>
+      <ul>
+        {books
+        .filter(book => book.status === 'SAATAVILLA')
+        .map(book => (
+          <li key={book.id}>{book.title}</li>
+        ))
+        }
+      </ul>
+      <h2>VARATUT KIRJAT</h2>
+      <ul>
+        {books
+        .filter(book => book.status === 'VARATTU')
+        .map(book => (
+          <li key={book.id}>{book.title}</li>
+        ))
+        }
+      </ul>
+      <h2>LAINATUT KIRJAT</h2>
+      <ul>
+        {books
+        .filter(book => book.status === 'LAINATTU')
+        .map(book => (
+          <li key={book.id}>{book.title}</li>
+        ))
+        }
+      </ul>
+
     </div>
   )
 }

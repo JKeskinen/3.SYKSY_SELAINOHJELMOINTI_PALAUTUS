@@ -254,6 +254,7 @@ function App() {
         <button onClick={() => setShowBestBooks(!showBestBooks)}>
           Näytä parhaat kirjat
         </button>
+        <a className="nav-link" href="/Home">Home</a>
         
       </div>
       <Books
