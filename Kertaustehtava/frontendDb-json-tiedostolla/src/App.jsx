@@ -183,7 +183,7 @@ function App() {
 
       if (existingBook) {
         if (window.confirm(
-          `${newTitle} on jo lisätty kirjastoon`
+          `${newTitle} on jo lisätty kirjastoon, muokataanko tietoja?`
         )) {
           axios
           .put(`http://localhost:3001/books/${existingBook.id}`,bookObject
