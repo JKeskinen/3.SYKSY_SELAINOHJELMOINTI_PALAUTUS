@@ -1526,3 +1526,32 @@ concat    = yhdistä / lisää
 ---
 
 [⬆️ Palaa ylös](#frontend-muistio--react-javascript-ja-axios)
+
+
+App.jsx
+  │
+  ├── React / JSX
+  ├── useState
+  ├── useEffect
+  ├── props
+  ├── tapahtumat
+  └── Axios
+        │
+        ▼
+server.js
+  │
+  ├── Express
+  ├── routes
+  ├── req.params
+  ├── req.body
+  ├── res.json()
+  └── GET / POST / PUT / DELETE
+
+App.css
+  │
+  ├── elementtivalitsimet
+  ├── className
+  ├── margin / padding
+  ├── width / height
+  ├── värit
+  └── hover
